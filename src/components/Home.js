@@ -1,4 +1,5 @@
 import React from 'react'
+import Note from './Note'
 
 function Home() {
   return (
@@ -21,6 +22,7 @@ function Home() {
   <button type="submit" class="btn btn-primary">Sign in</button>
 </form>
 </div>
+<Note/>
     </div>
   )
 }
