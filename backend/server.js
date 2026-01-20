@@ -1,11 +1,52 @@
-const express = require('express')
-const connectDB = require('./config/db')
-const userRouter = require('./MVC/user/route')
-const authRouter = require('./MVC/auth/route')
-const noteRouter = require('./MVC/note/route')
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./config/db");
+
+const userRouter = require("./MVC/user/route");
+const authRouter = require("./MVC/auth/route");
+const noteRouter = require("./MVC/note/route");
+
 const app = express();
-app.use(express.json());
 connectDB()
+/**
+ * ✅ CORS MUST BE FIRST
+ */
+const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+/**
+ * ✅ Preflight support
+ */
+app.options("*", cors());
+
+/**
+ * ✅ Body parser
+ */
+app.use(express.json());
+
+/**
+ * ✅ Routes AFTER CORS
+ */
+app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/note", noteRouter);
+
+const PORT = 6200;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 // const rateLimit = {}
 // const LIMIT = 3; // Max requests per minute
 // const TIME_FRAME = 60 * 1000; // 1 minute
@@ -29,13 +70,3 @@ connectDB()
 
 //     next();
 // })
-
-app.use('/api/user', userRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/note', noteRouter);
-app.get('/api', (req, res) => {
-    res.send('well come');
-})
-app.listen(6200, () => {
-    console.log(`server is listen at 6200 port`);
-})

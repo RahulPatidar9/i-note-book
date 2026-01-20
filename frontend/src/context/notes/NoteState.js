@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import noteContext from "./noteContext";
+import noteContext from "./NoteContext.js";
 import { getAllNotesAPI } from "../../config/api";
 
 const NoteState = ({ children }) => {
@@ -9,7 +9,9 @@ const NoteState = ({ children }) => {
   const getNotes = async () => {
     try {
       const response = await getAllNotesAPI();
-      if (response.data.success) {
+      console.log(response);
+      
+      if (response.data.status) {
         setNotes(response.data.notes);
       }
     } catch (error) {
