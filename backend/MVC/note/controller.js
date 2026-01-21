@@ -1,9 +1,9 @@
 const Service = require('./service')
 const add = async (req, res) => {
     try {
-        let { title, description, tag } = req.body;
-        const user = await Service.createNote({ title, description, tag });
-        res.status(201).json({ message: "Note created", user });
+        let { title, description ,tag="test"} = req.body;
+        const note = await Service.createNote({ title, description ,tag});
+        res.status(201).json({ message: "Note created", note });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
